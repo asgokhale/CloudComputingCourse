@@ -1,0 +1,15 @@
+# sample docker file showing a simple Docker build process
+#
+# The FROM clause tells docker what underlying base to use. We use
+# Ubuntu 18.04
+FROM ubuntu:18.04
+
+# install the following packages (replace it with your favorites)
+#
+# The RUN clause is used to execute different commands. Here we use
+# the -y to supply the "yes" needed for apt-get to continue. Remember
+# that the RUN command is non interactive.
+RUN apt-get -y update && apt-get install -y g++ emacs subversion
+
+# run bash as the final step of starting the container
+CMD /bin/bash

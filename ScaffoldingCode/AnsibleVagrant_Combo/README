@@ -1,0 +1,4 @@
+In this directory we show how we can combine Vagrant with Ansible.  I reused
+the demo master file from the AnsibleOnly directory. I did not copy the individual
+tasks and playbooks.  But you can do that and try things out.
+

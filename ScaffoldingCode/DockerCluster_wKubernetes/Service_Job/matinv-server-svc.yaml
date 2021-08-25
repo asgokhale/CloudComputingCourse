@@ -1,0 +1,23 @@
+---
+# CS4287-5287
+# Author: Aniruddha Gokhale
+# Created: Spring 2021
+#
+# This is a declarative approach to describe a Kubernetes based
+# service and deployment of zookeeper
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: matinv-server-svc
+spec:
+  type: NodePort   # by using NodePort, the service is published to outside world.
+  selector:
+    app: matinv-server-app     # used to match the pod(s) that run the actual matinv server
+  ports:
+    - name: matinv-server-port    # not needed, but I have added this
+      protocol: TCP     # this is default (so not needed either)
+      port: 5556   # the port used by the server inside the pod/container
+      targetPort: 5556   # not sure if we need this because if not specified, it is same as port
+      nodePort: 30000  # this is what will be externally published
+...

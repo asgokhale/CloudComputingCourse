@@ -1,0 +1,27 @@
+# Author: Aniruddha Gokhale
+# Vanderbilt University
+# Created May 2017,
+# Modified Nov 2017
+# Modified Oct 2018
+# Modified Oct 2019 to use Python3
+# Modified Spring 2021 to break this into client-server
+#
+# For Cloud Computing class
+#
+# First, use the latest ubuntu image, which points to the
+# latest LTS image, currently 20.04LTS
+FROM ubuntu:latest
+#
+# Now install the needed python packages
+RUN apt-get -y update && apt-get install -y net-tools python3 gcc
+RUN apt-get install -y python3-dev python3-pip
+RUN python3 -m pip install --upgrade pip
+RUN pip3 install --upgrade numpy
+RUN pip3 install --upgrade pyzmq
+
+#
+# Next, copy our matrix inverse server code into container image
+COPY matinv_server.py /
+#
+# Run a command shell (for Swarm and Kubernetes, we comment this out)
+#CMD /bin/bash

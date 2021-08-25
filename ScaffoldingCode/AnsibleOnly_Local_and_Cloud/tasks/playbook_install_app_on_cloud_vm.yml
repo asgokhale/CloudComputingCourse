@@ -1,0 +1,14 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2016
+# Modified: Fall 2020
+#
+# This playbook will install some packages on cloud VM
+  - name: Install subversion
+    apt: name=subversion state=latest
+    become: yes
+
+...
+

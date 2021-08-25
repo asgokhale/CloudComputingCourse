@@ -1,0 +1,21 @@
+# This is our clouds.yaml file
+clouds:
+  chameleon:
+    region_name: "KVM@TACC"
+    auth_type: "v3oidcpassword"
+    auth:  # here we provide all the credentials
+      auth_url: "https://kvm.tacc.chameleoncloud.org:5000/v3"
+      project_id: "c20e22f0db46495d9f2a6591f7d3999c"
+      identity_provider: "chameleon"
+      protocol: "openid"
+      client_id: "keystone-kvm-prod"
+      client_secret: "none"
+      discovery_endpoint: "https://auth.chameleoncloud.org/auth/realms/chameleon/.well-known/openid-configuration"
+      access_token_type: "access_token"
+      username: "<put your username that came in the downloaded file>"
+      password: "<add your CLI password>"
+    identity_api_version: 3
+    interface: "public"
+    project_name: "CH-819381"
+    project_domain_name: "chameleon"
+

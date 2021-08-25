@@ -1,0 +1,50 @@
+---
+# CS4287-5287
+# Author: Aniruddha Gokhale
+# Created: Spring 2021
+#
+# For assignment #4
+# this is the deployment pod for Spark master
+apiVersion: apps/v1
+kind: Deployment         # We are testing the Deployment resource
+metadata:
+  name: spark-master-deploy  # This will run the Spark master
+spec:                     # This is the specification 
+  replicas: 1             # only 1 replica of master
+  selector:
+    matchLabels:
+      app: sparkMasterApp          # Basically this is like the search string used to locate the pods
+  minReadySeconds: 5  # if anything crashes before 5 secs, the deployment is not
+                          # considered as ready and available. Default value is 0
+  template:               # Specified info needed to run the pod and what runs in the pod
+    metadata:
+      labels:
+        app: sparkMasterApp        # some label to give to this pod (see the matching label above)
+    spec:                 # actual specification
+      hostname: spark-master-host
+      nodeSelector:
+        # we force k8s to run Spark master on this node
+        kubernetes.io/hostname: kubemaster
+      containers:
+        - name: spark-master       # used to name container
+          image: 129.114.25.80:5000/my-spark:latest   # this is the image in private registry
+          imagePullPolicy: Always  # This forces the node to pull the image
+          ports:            # Spark master port
+            - containerPort: 7077  # inside it listens on this port
+            - containerPort: 8080  # the dashboard
+          env:  # environment variables to pass
+#            - name: SPARK_MASTER_HOST
+#              value: "129.114.25.80"  # floating IP of your spark master machine for outside world
+            - name: SPARK_LOCAL_IP
+              value: "spark-master-host"  # floating IP of your spark master machine for outside world
+            - name: SPARK_NO_DAEMONIZE # so that the master runs in foreground
+              value: "1"    
+
+            # the SPARK_HOME env set in docker image is not accessible for the command line
+            # below. So had to set it here.
+            - name: SPARK_HOME  
+              value: "/spark-3.1.1-bin-hadoop3.2"
+
+          command: ["$(SPARK_HOME)/sbin/start-master.sh"]
+          args: ["--host", "spark-master-host"]  # provide the floating IP addr of the master VM
+...

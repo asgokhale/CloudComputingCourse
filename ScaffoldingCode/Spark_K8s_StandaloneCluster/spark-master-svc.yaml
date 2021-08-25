@@ -1,0 +1,31 @@
+---
+# CS4287-5287
+# Author: Aniruddha Gokhale
+# Created: Spring 2021
+#
+# For assignment #4
+#
+# This is a declarative approach to describe a Kubernetes based
+# deployment of an application.  Since this is YAML, the indentation
+# is very important. This is service declaration for a Spark master
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-master-svc
+spec:
+  type: NodePort   # we want this published outside so outside entities can reach it
+  selector:
+    app: sparkMasterApp     # used for matching
+  ports:
+    - name: spark-master-port   # not really needed
+      protocol: TCP  # this is default
+      port: 7077
+      targetPort: 7077   # if not specified, is the same as port
+      nodePort: 30007    # externally as 30000
+    - name: spark-gui-port   # not really needed
+      protocol: TCP  # this is default
+      port: 8080
+      targetPort: 8080   # if not specified, is the same as port
+      nodePort: 30008    # externally as 30000
+...

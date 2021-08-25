@@ -1,0 +1,26 @@
+---
+# This is a declarative approach to describe a Kubernetes based
+# deployment of an application.  Since this is YAML, the indentation
+# is very important
+apiVersion: apps/v1
+kind: Deployment         # We are testing the Deployment resource
+metadata:
+  name: nginx-deployment  # A name must be given to the deployment in the metadata section
+spec:                     # This is the specification where we can even put the number of replicas
+  replicas: 3             # Say we want to run 3 replicas of nginx
+  selector:
+    matchLabels:
+      app: nginx          # Basically this is like the search string used to locate the pods
+  minReadySeconds: 5  # if anything crashes before 5 secs, the deployment is not
+                          # considered as ready and available. Default value is 0
+  template:               # Specified info needed to run the pod and what runs in the pod
+    metadata:
+      labels:
+        app: nginx        # some label to give to this pod (see the matching label above)
+    spec:                 # actual specification
+      containers:
+      - name: nginx       # Used by DNS
+        image: nginx:1.14.2   # this is the image name on hub.docker or if you have one locally. We use an older
+                          # and then show how we can upgrade to newer version
+        ports:            # Since nginx is a web server, we let it listen on port 80 in the container
+        - containerPort: 80

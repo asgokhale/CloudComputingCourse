@@ -1,0 +1,31 @@
+# Author: Aniruddha Gokhale
+# Vanderbilt University
+# Created Nov 2017
+#
+# For Cloud Computing class
+#
+#
+# Docker build file for our Reduce worker
+#
+
+# First, use the latest ubuntu image
+FROM ubuntu:latest
+#
+
+# Now install the needed python and other packages
+RUN apt-get -y update && apt-get install -y net-tools iputils-ping python
+
+# The following may not be needed but we let it be there.
+RUN apt-get install -y python-dev python-pip
+RUN python -m pip install --upgrade pip
+
+# Install the zeromq package
+RUN apt-get install -y python-zmq
+
+#
+# Next, copy the files needed to run the map-reduce master
+COPY mr_reduceworker.py /root/
+
+# The map worker will be started when the service is created with a
+# command line which will be of the form
+# python /root/mr_reduceworker.py <master IP addr> <master port> 

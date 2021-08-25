@@ -1,0 +1,14 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2020
+#
+# This playbook will remove specified packages on cloud VM
+  - name: Remove subversion (that we installed using the other playbook)
+    apt: name=subversion state=absent purge=yes
+                     # by making state=absent, we imply remove
+                     # by saying purge=yes, all config files are removed 
+    become: yes     # run with "sudo" privileges
+...
+

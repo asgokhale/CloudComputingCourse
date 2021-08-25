@@ -1,0 +1,26 @@
+As of Fall 2021 semester, the version of Vagrant is 2.2.18
+
+General steps
+----------------
+
+Create an empty directory where you want to play with Vagrant
+
+In that directory, run the following commands
+
+vagrant init
+        (this will create a skeleton vagrantfile, which we will modify)
+        But note that it may overwrite the sample vagrantfile provided.
+        So might want to rename it first.  Another sample vagrant file
+        is provided that starts FreeBSD Unix in the virtual machine.
+
+vagrant up
+        (this will create a VM according to the specification)
+
+vagrant provision
+        (to be used if we keep changing the provisioning tasks but not the VM creation task)
+
+vagrant ssh
+        (to remote login into the VM we just created and provisioned)
+        
+vagrant destroy
+        (to get rid of everything we did)

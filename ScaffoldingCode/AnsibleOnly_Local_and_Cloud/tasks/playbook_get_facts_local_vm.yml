@@ -1,0 +1,23 @@
+---
+#
+# Author: Aniruddha Gokhale
+# EECS 4287/5287: Principles of Cloud Computing
+# Created: Fall 2016
+# Modified: Fall 2018
+# Modified: Fall 2020
+#
+# In this playbook we get facts about our local VM using master playbook
+#
+  - name: Get facts of the VM   # This is just for printing out.
+    debug:                      # debug is used for printing information
+       var: ansible_facts       # ansible_facts is a built-in variable
+                                # that stores the collected value
+
+  - name: Print IPv4 data of VM   # This is just for printing out.
+    debug:                      # debug is used for printing information
+       var: ansible_facts['enp0s3']['ipv4']
+                             # ansible_facts here is a huge nested dictionary
+                             # The IPv4 data is deeply embedded inside
+
+...
+

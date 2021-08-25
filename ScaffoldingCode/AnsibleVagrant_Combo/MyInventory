@@ -1,0 +1,52 @@
+#
+# Author: Aniruddha Gokhale
+# CS4287-5287 Principles of Cloud Computing
+# Created: Fall 2018
+# Modified: Fall 2020
+#
+# This is a sample inventory file used for Ansible. You can name your
+# inventory file to whatever you want.  Make sure that you reference
+# the correct inventory file in your .ansible.cfg file.
+#
+# Here I have defined an alias to refer to my local VM (in which I will run
+# the ansible playbook).  These aliases will be referenced in the playbooks.
+# Every local machine can be accessed using either localhost or 127.0.0.1
+# IP address. Moreover, we tell Ansible, that the connection type to the
+# local VM is via local connection.  Note that how you name the alias
+# is up to you. I just called it MyLocalVMs
+#
+[MyLocalVMs]
+127.0.0.1  ansible_connection=local
+
+# Below I define an alias for the two VMs on my NAT network on
+# my laptop.  Note that, I needed to enable ssh connectivity between
+# the two VMs which is passwordless. For this I had to make sure that
+# ssh server was running on each (sudo apt install ssh). Then, I ran ssh-add
+# to install the private key with the ssh-agent. Then, I used ssh-copy-id
+# to store the public keys in the authorized keys on both VMs. After
+# that I was able to log into each other via passwordless ssh
+# Note that I just reused by chameleon private key but you can create
+# a completely new keypair via ssh-keygen
+[MyNATVMs]
+192.168.15.2 ansible_connection=ssh ansible_ssh_private_key_file=/home/gokhale/.ssh/gokhale_chameleoncloud.pem
+192.168.15.3 ansible_connection=ssh ansible_ssh_private_key_file=/home/gokhale/.ssh/gokhale_chameleoncloud.pem
+
+# Below I define my currently allocated VMs in the Chameleon Cloud and
+# their floating IP addresses. Naturally, you will need to change the IP
+# addresses to whatever are yours. Also, you can change the alias to
+# whatever you like to call it. Just make sure to use that alias in your
+# playbooks.  Here, since we are going to communicate remotely with
+# a cloud-based VM, the connection type used by ansible will be ssh,
+# and we tell Ansible the location of our ssh private key.
+#
+[MyChameleonVMs]
+# The following will need to be changed by the user (their floating IP on chameleon and the full name and location of the pem file)
+129.114.25.176 ansible_connection=ssh ansible_ssh_private_key_file=/home/gokhale/.ssh/gokhale_chameleoncloud.pem
+129.114.27.100 ansible_connection=ssh ansible_ssh_private_key_file=/home/gokhale/.ssh/gokhale_chameleoncloud.pem
+
+# If I have VMs on other cloud platforms, I can have more aliases
+#[MyAWSVMs]
+#
+#[MyAzureVMs]
+#
+# and so on.

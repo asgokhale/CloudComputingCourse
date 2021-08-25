@@ -1,0 +1,94 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2017
+# Modified: Fall 2020
+#
+# This playbook is our demo master file
+# The goal is to show how to have a single master file which then
+# includes multiple plays according to some well-designed choreography
+#
+# One way to reuse existing playbooks is to simply import them as
+# import_playbook: <playbook>
+# I show this approach for actions I do on the local VM where I let the
+# playbook define the hosts: and other params
+# However for other plays, I show a different approach using import_tasks or
+# include_tasks statements.
+#
+# The import_* statements are statically included and parsed while include_*
+# are dynamically included as the playbook executes. Thus, errors can be found
+# only when the task gets included at runtime. However, there are advantages
+# of including vs importing because a runtime value of variables may define
+# runtime behavior as opposed to a static inclusion.
+#
+# See https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html for
+# detailed explanation
+#
+
+#####################################################
+### Play 1: Get facts from all our VMs
+#
+# Here I show the use of include_tasks from child playbooks
+#####################################################
+- name: "Play 1: Perform fact gathering on all VMs"
+  hosts: MyLocalVMs          # specified in the MyInventory file
+  remote_user:  gokhale      # note that the user is ubuntu for 
+                             # vagrant-created VM else use the
+                             # appropriate user name
+
+  gather_facts: yes          # We ask Ansible to collect all facts
+  become_user: no            # No need for sudo as we are not installing anything
+
+  tasks:    # the task to be performed (here I am showing the effect of include_)
+  - include_tasks: tasks/playbook_get_facts_local_vm.yml
+  - include_tasks: tasks/playbook_get_facts_cloud_vm.yml
+
+#####################################################
+### Play 2: first perform all the actions for the local VM
+#
+# Here I show how existing playbooks are directly imported
+# Notice, I do not have any hosts: etc declaration as all of that
+# was in those original playbooks
+#####################################################
+- import_playbook: playbook_install_app_on_local_vm.yml
+- import_playbook: playbook_remove_app_from_local_vm.yml
+
+###########################################
+# Play 3: Now perform some activities on our cloud VMs
+#
+# Now perform some activities on cloud VMs
+# Note, that I could not have combined these with the Play 2
+# because Play 2 activities were performed on MyLocalVMs
+# while these are on MyChameleonVMs
+#
+# Feel free to replace import_ with include_ and you will notice
+# that ansible will dynamically include those tasks instead of
+# statically doing it.
+#
+# One way to find this out is to purposefully make some mistake
+# in child playbook (say wrong indentation). The import_ statement
+# will give an error at parsing time while include_ will give error
+# only while running the play
+###########################################
+# If we define the hosts param here, then we cannot define it
+# again in the playbook that we include or import because there will
+# be a conflict. 
+- name: "Play 3: Master file performing several actions on cloud VMs"
+  hosts: MyChameleonVMs       # specified in the MyInventory file
+  remote_user:  cc       # change this user to what it is for the cloud
+  strategy: debug        # start a debugger on error
+  become: yes               # run as sudo
+  collections:               # import the plugin
+  - openstack.cloud
+
+  ### All the tasks related to the cloud VMs ###
+  # note that since we already defined the hosts and remote_user parameters
+  # above, we simply import the tasks (could have included) and these
+  # tasks are in the playbooks defined in my tasks/ directory
+  tasks:
+  - import_tasks: tasks/playbook_install_app_on_cloud_vm.yml
+  - import_tasks: tasks/playbook_remove_app_from_cloud_vm.yml
+  - import_tasks: tasks/playbook_exec_app_on_cloud_vm.yml
+...
+

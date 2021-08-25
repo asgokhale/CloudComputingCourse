@@ -1,0 +1,27 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2016
+# Modified: Fall 2020
+#
+# This playbook will install python on our Cloud VM
+# Python is needed to run Ansible.  Python is the first thing we need.
+# But if Python doesn't exist on the machine, then how can ansible
+# execute. This is a chicken-and-egg problem. To overcome this
+# Ansible supports "pre_tasks" which can be raw.
+#
+- hosts: MyChameleonVMs       # my list of VMs on chosen cloud
+  remote_user:  cc        # remote user is cc but change as appropriate
+  become: yes               # run as sudo
+  gather_facts: no        # do not gather facts from remote machine
+  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
+    - openstack.cloud
+  pre_tasks:       # Task is something a playbook is supposed
+                            # to execute. Tasks contain actions which
+                            # are modules and their arguments
+    - name: 'install python3'     # always a good practice to name tasks
+      raw: apt-get install -y python3    # raw module does not need
+                                                                  # python on remote side
+...
+

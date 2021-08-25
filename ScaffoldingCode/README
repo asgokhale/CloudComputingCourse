@@ -1,0 +1,8 @@
+This directory contains scaffolding code to get you started with the
+different programming assignments.   The directories are named with
+meaningful names.
+
+Please note that since the underlying frameworks undergo frequent
+version upgrades, some APIs get deprecated over time and hence the
+code base requires upgrades.  If you happen to spot something is not
+working, please report it.

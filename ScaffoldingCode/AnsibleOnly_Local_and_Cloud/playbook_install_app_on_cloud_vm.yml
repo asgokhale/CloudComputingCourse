@@ -1,0 +1,21 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2016
+# Modified: Fall 2020
+#
+# This playbook will install some packages on cloud VM
+# Our cloud can be Horizon Cloud VM or Chameleon VMs or AWS VMs
+- hosts: MyChameleonVMs  # machines on whom the action is performed
+  remote_user:  cc    # change username depending on what it is on the cloud
+  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
+    - openstack.cloud
+
+  tasks:
+  - name: Install subversion
+    apt: name=subversion state=latest
+    become: yes
+
+...
+

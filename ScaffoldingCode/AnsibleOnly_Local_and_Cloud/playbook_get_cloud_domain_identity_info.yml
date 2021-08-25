@@ -1,0 +1,24 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2020
+#
+# This playbook will retrieve domain info for our Chameleon Cloud
+- name: Using the new Openstack Cloud collection
+  hosts: MyLocalVMs  # remember, the requestor is the local machine
+  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
+    - openstack.cloud
+
+  tasks:
+
+  - name: Obtain info about our Chameleon cloud identity domain
+    openstack.cloud.identity_domain_info:
+        cloud: chameleon   # this is the nickname from our clouds.yaml file
+    register: result            # this is a way to store output in a variable
+
+  - name: "Print results"
+    debug:  # Notice how variables are accessed (shown below)
+        msg: "{{ result.openstack_servers }}"
+... 
+

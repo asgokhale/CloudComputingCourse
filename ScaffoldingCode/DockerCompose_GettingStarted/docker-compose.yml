@@ -1,0 +1,9 @@
+# Taken directly from the getting started page. Added comments
+version: "3.8"
+services:
+  web:
+    build: .   # use the dockerfile in current working directory
+    ports:
+      - "5000:5000"  # map container's 5000 port to host's 5000 port
+  redis:
+    image: "redis:alpine"  # from hub.docker

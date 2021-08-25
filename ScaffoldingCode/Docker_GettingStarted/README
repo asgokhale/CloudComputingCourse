@@ -1,0 +1,8 @@
+Demonstrates a very simple dockerfile
+
+To build an image out of this docker file, run the following
+command in your Linux shell prompt:
+
+docker build -f ./my_first_dockerfile -t <give some name to be used as image name> .
+
+Do not forget the period (.) at the end of the command line above.

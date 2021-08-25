@@ -1,0 +1,54 @@
+---
+# CS4287-5287
+# Author: Aniruddha Gokhale
+# Created: Spring 2021
+#
+# For assignment #4
+# this is the deployment pod for Spark driver
+apiVersion: apps/v1
+kind: Deployment         # We are testing the Deployment resource
+metadata:
+  name: spark-driver-deploy  # This will run the Spark driver
+spec:                     # This is the specification 
+  replicas: 1             # only 1 replica of the driver
+  selector:
+    matchLabels:
+      app: sparkDriverApp   # Basically this is like the search string used to locate the pods
+  minReadySeconds: 5  # if anything crashes before 5 secs, the deployment is not
+                          # considered as ready and available. Default value is 0
+  template:               # Specified info needed to run the pod and what runs in the pod
+    metadata:
+      labels:
+        app: sparkDriverApp   # some label to give to this pod (see the matching label above)
+    spec:                 # actual specification
+      hostname: spark-driver-host
+      nodeSelector:
+        # we force k8s to run this driver on this node
+        kubernetes.io/hostname: kubemaster
+      containers:
+        - name: spark-driver       # used to name container
+          image: 129.114.25.80:5000/my-spark:latest   # this is the image in private registry
+          imagePullPolicy: Always  # This forces the node to pull the image
+          env:
+            - name: SPARK_LOCAL_IP
+              value: "spark-driver-host"
+            # the SPARK_HOME env set in docker image is not accessible for the command line
+            # below. So had to set it here.
+            - name: SPARK_HOME  
+              value: "/spark-3.1.1-bin-hadoop3.2"
+
+          ports:            # Spark driver port
+            - containerPort: 4040  # the dashboard
+            - containerPort: 7076  # port to listen on
+            - containerPort: 7079  # block manager port
+
+          # if you want to run multiple iterations of the same logic, use this approach
+          # then manually run the following commented out command/arg combo for the desired
+          # number of iterations. For convenience, a run.sh script is provided that you can
+          # copy into the running pod, then exec into that pod and execute the script, which
+          # will run the same code 20 times. You can change the iterations count in the script.
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+#          command: ["$(SPARK_HOME)/bin/spark-submit"]
+#          args: ["--master", "spark://spark-master-svc:7077", "--properties-file", "$(SPARK_HOME)/conf/spark-driver.conf", "$(SPARK_HOME)/examples/src/main/python/wordcount.py", "/alice_in_wonderland.txt"]  
+...

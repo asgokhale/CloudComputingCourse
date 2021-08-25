@@ -1,0 +1,20 @@
+This is the same example described on the Docker documentation pages.
+See https://docs.docker.com/compose/gettingstarted/ for more details.
+
+Start it as:
+
+      docker-compose up
+
+Note that the compose command will read the specifications provided in
+the *.yml file and internally issue the docker build command to first build
+an image, and then orchestrate the deployment of one or more docker
+containers depending on what all is specific in the YAML file.  Dependencies
+are specified in the accompanying requirements.txt file.
+
+When it is time to stop, in another window, type
+
+     docker-compose down
+
+This command will orchestrate the tearing down of all the docker containers
+started by the "up" command above.
+

@@ -1,0 +1,390 @@
+In this directory, we provide several standalone playbooks that you can execute
+to get a feel for how playbooks work.  We suggest that you execute these
+playbooks from your manually created VirtualBox VM.
+
+Note that every playbook is written in a language called YAML (which used to
+mean Yet Another Markup Language).  The file starts with 3 hyphens ---
+and ends with 3 dots ...
+
+===================================================
+        Files in this directory in the order of trying things out:
+        ----------------------------------------------------------
+(See below the installation steps and then how to try each playbook)
+
+playbook_get_cloud_domain_identity_info.yml
+        This playbook retrieves identity info on the cloud. It may lead to permission
+        denied errors as we may not have permission to retrieve this information.
+        
+playbook_get_facts_local_vm.yml
+        This playbook retrieves all the facts about our local VM
+        
+playbook_get_facts_nat_vms.yml
+        This playbook retrieves all the facts about our NAT network VMs. Do not worry
+        about this if you do not have these VMs set on your laptop.
+        
+playbook_get_facts_cloud_vm_newway.yml
+        This playbook retrieves all the facts about our local VM
+
+playbook_install_app_on_local_vm.yml
+        This playbook installs an app on our local VM. In your assignment, a number of
+        packages will have to be installed.
+        
+playbook_install_app_on_cloud_vm.yml
+        This playbook installs an app on cloud VM. In your assignment, a number of
+        packages will have to be installed.
+        
+playbook_remove_app_on_local_vm.yml
+        This playbook removes an app on our local VM.  This may be useful when you
+        need to remove any package and during cleanup.
+        
+playbook_remove_app_on_cloud_vm.yml
+        This playbook removes an app from our cloud VM.  This may be useful when you
+        need to remove any package and during cleanup.
+        
+playbook_copy_file_to_cloud_vm.yml
+        This playbook copies a file from source to cloud VM.  In our assignment, we will
+        need to copy several files from local to cloud.
+        
+playbook_exec_app_on_local_vm.yml
+        This playbook executes an app on local VM.  In our assignment, we will need
+        to execute different apps like producer.
+        
+playbook_exec_app_on_cloud_vm.yml
+        This playbook executes an app on cloud VM. In our assignment, we will need
+        to execute different apps like zookeeper, kafka broker, consumer and couchdb.
+
+playbook_raw_task.yml
+        If Python does not exist on the remote VM, then Ansible cannot execute. So
+        to resolve this chicken-egg problem, Ansible supports executing a raw task
+        where one could first install Python on the remote machine.
+        
+playbook_demo_master.yml
+        This playbook showcases how a top level master playbook can be
+        designed that includes child playbooks. This is how we need to organize the
+        assignment.
+
+        All the child playbooks are in the tasks subfolder.
+
+===================================================
+                        Preparatory Steps
+                        -------------------
+
+First complete the installation of needed artifacts. See SelfStudy slides on
+Ansible installation
+
+First log into your manually created Virtualbox Ubuntu VM. Make sure you copy
+the .ansible.cfg file in your home directory, and a MyInventory file inside the 
+~/.ansible/ directory (both included in this directory).
+
+Assume you are in this directory, then execute these steps on your shell prompt:
+
+The following will copy the sample .ansible file to your home directory
+prompt>cp .ansible.cfg ~/
+
+The following will create a .ansible directory in your home directory
+prompt>mkdir ~/.ansible
+
+The following will copy the MyInventory sample file to the just created
+.ansible directory
+prompt>cp MyInventory ~/.ansible/
+
+You will need to modify both these files as appropriate to your settings.  Open
+each of these files and read the comments in there to understand what changes
+are needed.
+
+Finally, you will need a clouds.yaml file in your ${HOME}/.config/openstack directory.
+A recently downloaded sample clouds.yaml file is included in this directory. For
+Chameleon, you will need to use your loginID and the CLI password, not the GUI
+password.
+
+===================================================
+                Trying individual playbooks
+                ------------------------------
+
+Then go to the directory which has the playbooks.  Run the individual playbooks
+as shown below: 
+
+prompt> ansible-playbook <playbook>.yml
+
+Example output
+----------------------
+If you run the playbook_get_facts_cloud_vm.yml, you will see output in the
+form shown below:
+=========================================================
+Using /home/gokhale/.ansible.cfg as config file
+
+PLAY [Gather facts about images containing ubuntu on Chameleon Cloud] **********
+
+TASK [Gathering Facts] *********************************************************
+ok: [127.0.0.1]
+
+TASK [Invoking os_flavor_facts to search for all flavors] **********************
+ok: [127.0.0.1] => {"ansible_facts": {"openstack_flavors": [{"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 1, "ephemeral": 0, "extra_specs": {}, "id": "1", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "m1.tiny", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 512, "rxtx_factor": 1.0, "swap": 0, "vcpus": 1}, {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 20, "ephemeral": 0, "extra_specs": {}, "id": "2", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "m1.small", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 2048, "rxtx_factor": 1.0, "swap": 0, "vcpus": 1}, {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 40, "ephemeral": 0, "extra_specs": {}, "id": "3", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "m1.medium", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 4096, "rxtx_factor": 1.0, "swap": 0, "vcpus": 2}, {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 80, "ephemeral": 0, "extra_specs": {}, "id": "4", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "m1.large", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 8192, "rxtx_factor": 1.0, "swap": 0, "vcpus": 4}, {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 160, "ephemeral": 0, "extra_specs": {}, "id": "5", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "m1.xlarge", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 16384, "rxtx_factor": 1.0, "swap": 0, "vcpus": 8}, {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 2048, "ephemeral": 0, "extra_specs": {}, "id": "6", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "storage.medium", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 4096, "rxtx_factor": 1.0, "swap": 0, "vcpus": 1}, {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 160, "ephemeral": 0, "extra_specs": {}, "id": "7", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "m1.xxlarge", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 32768, "rxtx_factor": 1.0, "swap": 0, "vcpus": 8}, {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 160, "ephemeral": 0, "extra_specs": {}, "id": "8", "is_disabled": false, "is_public": true, "location": {"cloud": "defaults", "project": {"domain_id": null, "domain_name": null, "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"}, "region_name": "", "zone": null}, "name": "m1.xxxlarge", "os-flavor-access:is_public": true, "properties": {"OS-FLV-DISABLED:disabled": false, "OS-FLV-EXT-DATA:ephemeral": 0, "os-flavor-access:is_public": true}, "ram": 32768, "rxtx_factor": 1.0, "swap": 0, "vcpus": 16}]}, "changed": false}
+
+TASK [Print the list of names] *************************************************
+ok: [127.0.0.1] => {
+    "openstack_flavors": [
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 1, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "1", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "m1.tiny", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 512, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 1
+        }, 
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 20, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "2", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "m1.small", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 2048, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 1
+        }, 
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 40, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "3", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "m1.medium", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 4096, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 2
+        }, 
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 80, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "4", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "m1.large", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 8192, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 4
+        }, 
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 160, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "5", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "m1.xlarge", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 16384, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 8
+        }, 
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 2048, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "6", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "storage.medium", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 4096, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 1
+        }, 
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 160, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "7", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "m1.xxlarge", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 32768, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 8
+        }, 
+        {
+            "OS-FLV-DISABLED:disabled": false, 
+            "OS-FLV-EXT-DATA:ephemeral": 0, 
+            "disk": 160, 
+            "ephemeral": 0, 
+            "extra_specs": {}, 
+            "id": "8", 
+            "is_disabled": false, 
+            "is_public": true, 
+            "location": {
+                "cloud": "defaults", 
+                "project": {
+                    "domain_id": null, 
+                    "domain_name": null, 
+                    "id": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", 
+                    "name": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+                }, 
+                "region_name": "", 
+                "zone": null
+            }, 
+            "name": "m1.xxxlarge", 
+            "os-flavor-access:is_public": true, 
+            "properties": {
+                "OS-FLV-DISABLED:disabled": false, 
+                "OS-FLV-EXT-DATA:ephemeral": 0, 
+                "os-flavor-access:is_public": true
+            }, 
+            "ram": 32768, 
+            "rxtx_factor": 1.0, 
+            "swap": 0, 
+            "vcpus": 16
+        }
+    ]
+}
+
+PLAY RECAP *********************************************************************
+127.0.0.1                  : ok=3    changed=0    unreachable=0    failed=0   
+
+
+

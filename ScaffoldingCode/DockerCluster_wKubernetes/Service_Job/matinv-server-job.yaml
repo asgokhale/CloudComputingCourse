@@ -1,0 +1,24 @@
+# This is a declarative approach to describe a Job type Kubernetes
+# workload.   Since this is YAML, the indentation is very important
+apiVersion: batch/v1
+kind: Job         # We are testing the Job resource type
+metadata:
+  name: matinv-job  # A name must be given to the Job type in the metadata section
+spec:                     # This is the specification where we can even put the number of replicas
+  template:               # Specified info needed to run the pod and what runs in the pod
+    metadata:
+      labels:
+        app: matinv-server-app  # this is used in our service yaml file to match with the pod
+    spec:                 # actual specification
+      hostname: matinv-server-host
+      nodeSelector:  # this shows how you force k8s to schedule the pod on a specified node
+        kubernetes.io/hostname: kubeworker2
+      containers:
+        - name: matinv-server       # this is going to be used for DNS name
+          # Change the IP address to where you are running this
+          image: 129.114.25.80:5000/matinv-server   # this is the image in registry accessible
+                                             # from all our workers
+          imagePullPolicy: Always  # This forces the node to pull the image
+          command: ["python3"]
+          args: ["/matinv_server.py"]  # arguments to run. 
+      restartPolicy: Never  # we ask Kubernetes not to restart

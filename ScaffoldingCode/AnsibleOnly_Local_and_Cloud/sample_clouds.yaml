@@ -1,0 +1,30 @@
+# This is a clouds.yaml file, which can be used by OpenStack tools as a source
+# of configuration on how to connect to Chameleon.
+#
+# If you are only a member of one project, just put this file in
+# ~/.config/openstack/clouds.yaml and tools like the CLI will just work with no
+# further config. (You will need to add your password to the auth section)
+#
+# If you are a member of multiple projects, when invoking the CLI, provide
+# either the env variable OS_CLOUD=<project> or flag --os-cloud=<project> to
+# target your operation to the desired project, where <project> is the name
+# (or nickname, if set) of your project.
+clouds:
+  "CH-819381":  # This is the alias you use in your inventory file. I changed
+                         # it to chameleon
+    auth_type: v3oidcpassword
+    auth:
+      auth_url: https://kvm.tacc.chameleoncloud.org:5000
+      username: <this will have your user name>
+      password: <put your CLI password here. This field is missing in the downloaded file>
+      protocol: openid
+      identity_provider: chameleon
+      discovery_endpoint: https://auth.chameleoncloud.org/auth/realms/chameleon/.well-known/openid-configuration
+      client_id: keystone-kvm-prod
+      access_token_type: access_token
+      client_secret: none
+    region_name: "KVM@TACC"
+    interface: public
+    identity_api_version: 3
+    project_name: "CH-819381"
+    project_domain_name: chameleon

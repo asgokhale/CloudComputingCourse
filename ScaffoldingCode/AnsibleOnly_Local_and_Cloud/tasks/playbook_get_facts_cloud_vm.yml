@@ -1,0 +1,17 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2020
+#
+  - name: Obtain info about specific servers on the Chameleon
+    openstack.cloud.server_info:
+        cloud: chameleon   # this is the nickname from our clouds.yaml file
+        server: gokhale*     # set this whatever you are interested in
+    register: result            # this is a way to store output in a variable
+
+  - name: "Print results"
+    debug:  # Notice how variables are accessed (shown below)
+        msg: "{{ result.openstack_servers }}"
+... 
+

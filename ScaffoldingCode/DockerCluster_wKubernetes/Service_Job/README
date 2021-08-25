@@ -1,0 +1,92 @@
+This directory contains code for matrix inverse now implemented as a client-server
+application. The idea is that the matrix inverse server will run as a Job pod in a
+kubernetes cluster and will be exposed to the outside world via a NodePort listening
+on say port 30000. The client on the other hand can be either run directly from your
+laptop VM or run inside a docker container on your VM.
+
+===============================
+Build the docker images
+===============================
+
+docker build -f ./dockerfile_server -t <some name for the image> .
+
+docker build -f ./dockerfile_client -t <some name for the image> .
+
+I used matinv_server and matinv_client as my image names in the above.
+
+===============================
+3 (possibly more) ways to test things out
+===============================
+
+---------------------------------------------------------------------------------------
+Approach 1: Directly run them as processes on laptop VM
+---------------------------------------------------------------------------------------
+
+In one shell, start server as follows:
+   python3 matinv_server.py
+
+In another shell, start client as follows:
+   python3 matinv_client.py results.txt
+
+(you can do python3 matinv_client.py -h to get the command line args)
+
+---------------------------------------------------------------------------------------
+Approach 2: Running both in Docker containers on laptop
+---------------------------------------------------------------------------------------
+
+In one shell, start server in a container as follows:
+
+   docker run -it -p 5556:5556 matinv_server /bin/bash
+
+On the docker container's # prompt, type
+   python3 matinv_server.py
+
+Here, we map the container's 5556 port to the VM's 5556 port. Our server is
+running on port 5556 by default
+
+In another shell, you could either run the client directly as a process or in a container:
+   python3 matinv_client.py results.txt
+
+OR
+
+   docker run -it matinv_client /bin/bash
+
+On the container's # prompt, then invoke the client as you did above. You can
+pass additional command line params like the number of iterations or dimensions.
+But note that "localhost" is now that container. So you need to pass IP address of
+the parent VM. For example, my laptop's VM had an IP of 192.168.15.3, so I can
+invoke the command as:
+
+    python3 matinv_client.py -a 192.168.15.3:5556 -d 2000 results.txt
+
+---------------------------------------------------------------------------------------
+Approach 3: Running server in K8S pod while client on laptop
+---------------------------------------------------------------------------------------
+
+In one shell, start server in a container as follows:
+
+   docker run -it -p 5556:5556 matinv_server /bin/bash
+
+On the docker container's # prompt, type
+   python3 matinv_server.py
+
+Here, we map the container's 5556 port to the VM's 5556 port. Our server is
+running on port 5556 by default
+
+In another shell, you could either run the client directly as a process or in a container:
+   python3 matinv_client.py results.txt
+
+OR
+
+   docker run -it matinv_client /bin/bash
+
+On the container's # prompt, then invoke the client as you did above. You can
+pass additional command line params like the number of iterations or dimensions.
+But note that "localhost" is now that container. So you need to pass IP address of
+the parent VM. For example, my laptop's VM had an IP of 192.168.15.3, so I can
+invoke the command as:
+
+    python3 matinv_client.py -a 192.168.15.3:5556 -d 2000 results.txt
+
+
+

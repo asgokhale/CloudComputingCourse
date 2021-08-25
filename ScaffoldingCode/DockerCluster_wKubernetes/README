@@ -1,0 +1,32 @@
+In this directory we provide samples for different Kubernetes Workload Resources 
+to realizing pods.  These include at a minimum Deployment, Job and Service.
+
+See Self-Study slides for both these scenarios.
+
+Deployment
+--------------
+In this directory, we use an nginx deployment YAML file from the Kubernetes.io
+distribution. We show a 3-replica deployment on our 2-node cluster. We then show
+how to convert it into a service.  We then delete this service and deployment.
+
+
+Job
+----
+In this directory, we use a home-grown matrix inverse code and the associated
+Docker container in which it runs as a Job type pod managed by Kubernetes.
+
+Since our docker image for this matrix inverse program is not available in hub.docker.com,
+we either need to create a private registry from where the Kuberenetes system can find
+it, or else we must manually build the image and have it available in the cache of every
+worker node.  We will use the latter approach.
+
+So first build the docker image for each worker machine in our cluster using the
+following command:
+
+docker build -f dockerfile -t my-matrixinv .
+
+where, I am providing a tag called my-matrixinv. You can use something else but
+make sure to use that in the YAML file.
+
+We then show how to use kubectl CLI commands to run against the matrix inverse
+container inside a pod.

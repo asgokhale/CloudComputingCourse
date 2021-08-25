@@ -1,0 +1,28 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2020
+# Modified: Fall 2020  to use new approach
+#
+# This playbook will execute a command on the remote machine
+# Horizon Cloud VM or Chameleon VMs or AWS VMs
+# See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
+- hosts: MyChameleonVMs
+  remote_user:  cc   # change the user to whatever is the user on the cloud VM
+  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
+    - openstack.cloud
+
+  # here we use the command module. There is also the shell module to do similar
+  # outcome especially when you want to run a shell script, and there are more
+  # complex arguments including executing in specific directories.
+  tasks:
+  - name: Execute a command on remote cloud VM
+    command: top -n 1 -b  # say we execute our famous command from assignment #1
+    register: output
+
+  - name: Print the output
+    debug:
+      msg: "{{ output }}"
+...
+

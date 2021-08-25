@@ -1,0 +1,23 @@
+# CS4287/5287 Principles of Cloud Computing
+#
+# Author: Aniruddha Gokhale
+# Created: Fall 2020
+#
+# This docker file is being used to demonstrate 
+#
+# The FROM clause tells docker what underlying base to use. We use
+# Ubuntu 18.04
+FROM python:3.8-buster
+
+# install the following packages (replace it with your favorites)
+#
+# The RUN clause is used to execute different commands. Here we use
+# the -y to supply the "yes" needed for apt-get to continue. Remember
+# that the RUN command is non interactive.
+RUN apt-get -y update && apt-get install -y git
+
+# Install the ZeroMQ Python bindings
+RUN python3 -m pip install --upgrade pyzmq
+
+# run bash as the final step of starting the container
+CMD /bin/bash

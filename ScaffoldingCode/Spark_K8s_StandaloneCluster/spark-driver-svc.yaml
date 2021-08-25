@@ -1,0 +1,33 @@
+---
+# CS4287-5287
+# Author: Aniruddha Gokhale
+# Created: Spring 2021
+#
+# For assignment #4
+#
+# This is a declarative approach to describe a Kubernetes based
+# deployment of an application.  Since this is YAML, the indentation
+# is very important. This is service declaration for a Spark driver
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-driver-svc
+spec:
+  type: ClusterIP   # published inside the cluster (default service mode)
+  selector:
+    app: sparkDriverApp     # used for matching
+  ports:
+    - name: spark-driver-port   # not really needed
+      protocol: TCP  # this is default
+      port: 7076     # driver listens on this port
+      targetPort: 7076   # if not specified, is the same as port
+    - name: spark-blkmgr-port   # not really needed
+      protocol: TCP  # this is default
+      port: 7079     # used by the block manager
+      targetPort: 7079   # if not specified, is the same as port
+    - name: spark-driver-gui   # not really needed
+      protocol: TCP  # this is default
+      port: 4040     # we will use this for 
+      targetPort: 4040   # if not specified, is the same as port
+...

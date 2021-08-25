@@ -1,0 +1,24 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2016
+# Modified: Fall 2018
+# Modified: Fall 2020
+#
+# In this playbook, we will show how to remove an installed package via
+# the aptitude module
+#
+- hosts: MyLocalVMs          # specified in the MyInventory file
+  remote_user: gokhale       # note that the user is ubuntu for the
+                             # vagrant-created VM else use the
+                             # appropriate user name
+
+  tasks:                     # the task to be performed
+  - name: Remove the installed subversion module using apt-get
+    apt: name=subversion state=absent purge=yes
+                     # by making state=absent, we imply remove
+                     # by saying purge=yes, all config files are removed 
+    become: yes     # run with "sudo" privileges
+...
+

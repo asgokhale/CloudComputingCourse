@@ -1,0 +1,15 @@
+# Author: Aniruddha Gokhale
+# Vanderbilt University
+# Created Dec 2019
+#
+# For Cloud Computing class
+#
+# First, use the latest ubuntu image, which points to the
+# latest LTS image, currently 18.04
+FROM ubuntu:latest
+#
+# Now install the needed packages
+RUN apt-get -y update && apt-get install -y stress-ng
+#
+# Run a command shell (for Swarm, we comment this out)
+CMD /bin/bash

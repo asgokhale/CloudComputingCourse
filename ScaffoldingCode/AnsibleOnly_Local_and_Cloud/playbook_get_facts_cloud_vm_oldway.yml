@@ -1,0 +1,34 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2018
+# Modified: Fall 2020
+#
+# This playbook will get facts about one or more VMs on Chameleon
+# This playbook is using the older way of doing things
+  - name: "Get facts of a specified VM on Chameleon Cloud"
+    hosts: MyLocalVMs  # alias to the requestor 
+    tasks:
+      - name: "Invoking os_server_facts module on Chameleon"
+        os_server_facts:   # this is the name of the open stack module
+          auth:  # here we provide all the credentials
+              auth_url: https://kvm.tacc.chameleoncloud.org:5000
+              username: <put your user name here>
+              password: <put your password here>
+              project_name: <put the chameleon project id e.g., CH-819381 here>
+              user_domain_name: default
+              project_domain_name: default
+          server: <put the instance name here or regular expression>
+          wait: yes  # blocking call
+          timeout: 120 # time out of 2 mins before we give up
+ 
+      - name: "Print server facts"
+        debug:  # used to print
+          var: openstack_servers  # this is the variable that stores facts
+
+      - name: "Print Private IP Address"
+        debug: # print some info
+          var: openstack_servers[0]['private_v4']
+... 
+

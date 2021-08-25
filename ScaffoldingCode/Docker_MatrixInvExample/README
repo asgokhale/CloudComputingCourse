@@ -1,0 +1,5 @@
+This directory contains code to help you in the Homework 3
+
+dockerfile contains the information to create your custom matrix inverse image.
+matinv.py is the actual source code
+stressng_dockerfile contains an image for running stress-ng in a container.

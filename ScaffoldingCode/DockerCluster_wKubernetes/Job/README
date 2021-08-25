@@ -1,0 +1,29 @@
+In this directory we use our matrix inverse program and a corresponding
+dockerfile to build the image.
+
+There are 4 YAML files from which we attempt to create a working pod.
+(1) matinv-job_wMistake.yaml:
+     Although syntactically correct, this will not help to create the pod because
+     the image is cached locally on master and not available on hub; and so the
+     worker cannot find it. This happens because the policy is to always pull.
+
+(2) matinv-job_wLocalImage.yaml:
+     Here we make the imagePullPolicy as never. So this means that the node must be
+     able to find the image pre-cached in its cache. For this to work, you must build the
+     dockerfile on each worker machine you have, which is not a scalable task as the
+     number of machines and number of images managed grows.
+
+(3) matinv-job_wRegistryMistake.yaml:
+     Here we specify the private registry's IP address but it is localhost:5000.  If we
+     keep the imagePullPolicy to Never, then the worker will try to look into its own
+     localhost:5000 and does not find one unless we degenerate to case #2 by
+     creating local private registries and building images and pushing them locally.
+     As such this will be even more work than #2.  Even if we say the policy is Always,
+     it will try to pull from localhost:5000, which is the same case as finding locally.
+     Either way, things fail.
+
+(4) matinv-job_wCorrectRegistry.yaml:
+     Here we make the imagePullPolicy as Always.  Moreover, and more importantly,
+     we specify the IP address of the master private registry which is holding all our
+     private images. So as long as the IP address is reachable, we are in good shape.
+

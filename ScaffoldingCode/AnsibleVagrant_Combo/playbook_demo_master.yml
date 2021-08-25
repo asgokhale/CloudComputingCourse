@@ -1,0 +1,33 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2017
+# Modified: Fall 2020
+#
+# This playbook is our demo master file
+# The goal is to show how to have a single master file which then
+# includes multiple plays according to some well-designed choreography
+#
+# This file is similar to the one in the AnsibleOnly_Local_and_Cloud folder
+# For now I just kept one play in here but feel free to add more.
+#####################################################
+### Play 1: Get facts from all our VMs
+#
+# Here I show the use of import_tasks from child playbooks
+#####################################################
+- name: "Play 1: Perform fact gathering on all VMs"
+  hosts: MyLocalVMs          # specified in the MyInventory file
+  remote_user:  ubuntu      # note that the user is ubuntu for 
+                             # vagrant-created VM else use the
+                             # appropriate user name
+
+  gather_facts: yes          # We ask Ansible to collect all facts
+  become_user: no            # No need for sudo as we are not installing anything
+
+  tasks:    # the task to be performed (here I am showing the effect of include_)
+  - include_tasks: tasks/playbook_get_facts_local_vm.yml
+  - include_tasks: tasks/playbook_get_facts_cloud_vm.yml
+
+...
+

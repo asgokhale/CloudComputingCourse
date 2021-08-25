@@ -1,0 +1,14 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2016
+# Modified: Fall 2020  to use new approach
+#
+# This playbook will execute a command on the remote machine
+# Horizon Cloud VM or Chameleon VMs or AWS VMs
+# See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
+  - name: Execute a command on remote cloud VM
+    command: top -n 1 -b  # say we execute our famous command from assignment #1
+...
+

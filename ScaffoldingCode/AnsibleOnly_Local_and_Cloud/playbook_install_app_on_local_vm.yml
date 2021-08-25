@@ -1,0 +1,23 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2016
+# Modified: Fall 2018
+# Modified: Fall 2020
+#
+# In this playbook, we will show how to install a package via
+# the aptitude module
+#
+- hosts: MyLocalVMs          # specified in the MyInventory file
+  remote_user: gokhale       # note that the user is vagrant for the
+                             # vagrant-created VM else use the
+                             # appropriate user name
+
+  tasks:                     # the task to be performed
+  - name: Install subversion module using apt-get
+    apt: name=subversion state=latest
+                     # above we install latest svn using apt package mgr
+    become: yes     # run with "sudo" privileges
+...
+

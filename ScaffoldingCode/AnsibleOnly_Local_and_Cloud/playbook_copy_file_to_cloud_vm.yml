@@ -1,0 +1,26 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2016
+# Modified: Fall 2020  to include new approach
+#
+# This playbook will copy a file from local to remote machine. 
+# Our cloud can be Horizon Cloud or Chameleon or AWS etc
+# See https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+- hosts: MyChameleonVMs  # change to the appropriate alias
+  remote_user:  cc   # change to the appropriate user name on the cloud
+  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
+    - openstack.cloud
+
+  # We will copy this very playbook file to the other side :-)
+  # Note the "mode" parameter, which will be handy if you need to change
+  # the permissions of the file after copying
+  tasks:
+  - name: Copy a file from local to remote
+    copy:
+        src: ./playbook_copy_file_to_cloud_vm.yml   # here you can give absolute path also.
+        dest: /home/cc/    # destination directory into which this file will get copied.
+                                      # if you want to name it differently, give the file name also.
+...
+

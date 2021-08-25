@@ -1,0 +1,13 @@
+h2s2 python mr_mapworker.py 10.0.0.1 5557 &> h2s2.out &
+h3s2 python mr_mapworker.py 10.0.0.1 5557 &> h3s2.out &
+h4s2 python mr_mapworker.py 10.0.0.1 5557 &> h4s2.out &
+h5s2 python mr_mapworker.py 10.0.0.1 5557 &> h5s2.out &
+h6s2 python mr_mapworker.py 10.0.0.1 5557 &> h6s2.out &
+h7s2 python mr_mapworker.py 10.0.0.1 5557 &> h7s2.out &
+h8s2 python mr_mapworker.py 10.0.0.1 5557 &> h8s2.out &
+h9s2 python mr_mapworker.py 10.0.0.1 5557 &> h9s2.out &
+h10s2 python mr_mapworker.py 10.0.0.1 5557 &> h10s2.out &
+h11s2 python mr_mapworker.py 10.0.0.1 5557 &> h11s2.out &
+h12s3 python mr_reduceworker.py 10.0.0.1 5557 &> h12s3.out &
+h13s3 python mr_reduceworker.py 10.0.0.1 5557 &> h13s3.out &
+h14s3 python mr_reduceworker.py 10.0.0.1 5557 &> h14s3.out &

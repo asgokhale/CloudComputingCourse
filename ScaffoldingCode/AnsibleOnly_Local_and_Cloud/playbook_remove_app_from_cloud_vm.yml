@@ -1,0 +1,21 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2020
+#
+# This playbook will remove specified packages on cloud VM
+# Our cloud can be Horizon Cloud VM or Chameleon VMs or AWS VMs
+- hosts: MyChameleonVMs  # machines on whom the action is performed
+  remote_user:  cc    # change username depending on what it is on the cloud
+  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
+    - openstack.cloud
+
+  tasks:
+  - name: Remove subversion (that we installed using the other playbook)
+    apt: name=subversion state=absent purge=yes
+                     # by making state=absent, we imply remove
+                     # by saying purge=yes, all config files are removed 
+    become: yes     # run with "sudo" privileges
+...
+
