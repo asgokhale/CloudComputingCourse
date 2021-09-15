@@ -1,0 +1,37 @@
+// Author: Aniruddha Gokhale, Vanderbilt University
+// Created: Sept 2021
+//
+// IDL schema for the data type we will be transferring
+
+// We have to define a namespace under which this schema gets
+// translated to the programming language we are using.
+
+// Since we are using Kafka in our assignments, I am going to call my
+// namespace as MyKafkaTopic
+
+namespace MyKafkaTopic;
+
+// define the user-defined type we want to serialize
+// This can be arbitrarily complex. Here we show a sample
+// which is not overly complex but still showcases the features
+//
+// In your case this structure will be whatever is the data structure
+// that holds the information that the producer will send to consumer
+
+// The data structure is defined using the keyword table as shown. The
+// variable name Topic is my choice.  Individual fields of the data structure
+// use the form <variable name: data type>
+
+table Topic
+{
+   seq_no: uint32;   // think of this as a seq num in a TCP segment
+   ts: double;          // say this is the timestamp
+   name: string;      // say this is some descriptive string
+   data: [uint32];    // say this is some binary data
+}
+
+// indicate what is the top level structure from where the serialization starts.
+// The reason we need this is because we may have a very complicated nested
+// data structure and so we need to tell the compiler the starting point.
+
+root_type Topic;

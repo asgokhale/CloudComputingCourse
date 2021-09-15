@@ -1,0 +1,95 @@
+// Author: Aniruddha Gokhale, Vanderbilt University
+// Created: Sept 2021
+//
+
+Purpose of this sample code is to show how to use Flatbuffers for serialization.
+Essentially, using flatbuf, we can convert arbitrarily complex data types between
+native and serialized formats. When something is serialized, it becomes a byte stream
+which is what we then transmit via the "send" command (if it is the producer) and
+receive the bytestream (if it is the consumer).
+
+Files in this directory:
+-----------------------
+
+schema.fbs
+        defines the schema for the user-defined type that we want to serialize
+
+flatbufdemo.py
+        Driver program to showcase the flatbuffer-based serialization
+        
+serialize.py
+        uses the generated flatbuffer logic to serialize and deserialize data
+
+-----------------------------
+Package installation
+-----------------------------
+We will need the Flatbuffer package available from
+
+           https://google.github.io/flatbuffers/
+
+by doing
+
+           git clone https://github.com/google/flatbuffers.git
+
+You will have to build the package from the source as described here:
+
+           https://google.github.io/flatbuffers/flatbuffers_guide_building.html
+
+Since we will be building it for our Ubuntu VM, use the Unix Makefiles option to cmake.
+You will also need to install cmake, if you do not already have it.
+
+    cd flatbuffers
+    cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+
+This will generate the makefiles, after which you build the binaries by issuing
+the command
+
+     make
+
+This will create the flatbuffers compiler for us called "flatc"
+
+If you want to install it in system wide folders so that the compiler is available on your
+PATH, then do this after building the compiler above.
+
+      sudo make install
+
+which will install the compiler in /usr/local/bin and will be accessible from your PATH env
+
+There is also a Python package for flatbuffers that can be installed via pip but
+I have not tried that.
+
+----------------------------------------------------
+Invoking the Compiler on our Schema
+----------------------------------------------------
+
+Before we can attempt any serialization, we will need to convert the schema to the
+code that our programming language can understand. To that end we use the
+"flatc" compiler from Flatbuffer.  The Flatbuffer schema compiler and its options
+are defined here:
+
+       https://google.github.io/flatbuffers/flatbuffers_guide_using_schema_compiler.html
+       
+We will use the compiler to generate the code that we will use for our program needs.
+It needs to be invoked only once unless you change the schema in which case you run
+it again.  So, do the following in your Ubuntu VM. Since we are using Python, we tell
+flatc to generate Python code.
+
+For now, the sample code already has this schema transformed to Python code for us.
+So you don't need to do this for this example.
+
+The command we used is:
+
+    flatc --python schema.fbs
+
+
+Running the Code
+-------------------------
+
+The rest of the code is run in the following manner:
+(1) Open a shell in your Ubuntu VM
+(2) Invoke "python3 flatbufdemo.py"
+
+To find out the command line parameters accepted by this program, type
+python3 flatbufdemo.py -h
+
+

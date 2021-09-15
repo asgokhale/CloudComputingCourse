@@ -1,0 +1,30 @@
+// Author: Aniruddha Gokhale, Vanderbilt University
+// Created: Sept 2021
+//
+
+Purpose of this sample code is to show how JSON objects can be serialized and
+ deserialized. 
+
+Files in this directory:
+-----------------------
+
+jsondemo.py
+        Driver program to showcase the JSON based approach serialization
+        
+serialize.py
+        uses the generated flatbuffer logic to serialize and deserialize data
+
+-----------------------------
+Package installation
+-----------------------------
+
+See https://docs.python.org/3/library/json.html
+
+If it is not there in your installation, install via pip
+
+Running the Code
+-------------------------
+
+The rest of the code is run in the following manner:
+(1) Open one shell in your Ubuntu VM
+(2) Invoke "python3 jsondemo.py"
