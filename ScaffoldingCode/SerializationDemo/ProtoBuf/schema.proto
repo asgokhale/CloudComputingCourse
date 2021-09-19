@@ -1,0 +1,49 @@
+// Author: Aniruddha Gokhale, Vanderbilt University
+// Created: Sept 2021
+//
+
+// Tell the compiler what syntax are we using (version 2 or 3)
+syntax = "proto2";
+
+// We have to define a package.  Since we are using Kafka in our assignments,
+// I am going to call my package as MyKafkaTopic. We will define very similar
+// message format as we did in FlatBuffers
+
+package MyKafkaTopic;
+
+// Define the Protobuf message format for the info we want to transfer
+
+// the language agnostic data structure is defined as a message. This can be
+// arbitrarily complex/nested. But we show a simpler one similar to the one
+// we used in FlatBuffer
+
+// required means that field is mandatory; optional means it may or may not exist
+// The philosophy is to use optional instead of required because that allows you
+// to change things in future in case your message format were to change and you
+// don't want any of the developed code to be impacted. But here we don't care and
+// just use these keywords in some random manner.  Note that each field is numbered
+// as shown.  
+// There must be exactly one required field
+// There can be 0 or 1 optional fields
+// There can be 0 or more repeated fields. Repeated is like array.
+// [packed=true] can be used for scalar repeated entries so the compiler
+// generates efficient encoding
+//
+// There is no need to have field numbers be successive numbers as shown. For instance
+// in future, if you were to insert some field in between, you might have to have a
+// number that you can use. So you could leave gaps for future extension. But
+// again, we don't care right now.
+
+message Topic
+{
+   required uint32 seq_num = 1;  // think of this as a seq num in a TCP segment
+   optional double ts = 2;         // say this is the timestamp
+   optional string name = 3;      // say this is some descriptive string
+   repeated uint32 data = 4 [packed=true];    // say this is some binary data
+}
+
+// unlike flatbuf, we do not provide any top-level message. Note that we could
+// have defined multiple message types in a single file and created a nested
+// or independent messages. For independent messages, the suggestion is to keep
+// their own .proto file else it will lead to code bloat.
+

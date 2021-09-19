@@ -1,0 +1,91 @@
+// Author: Aniruddha Gokhale, Vanderbilt University
+// Created: Sept 2021
+//
+
+Purpose of this sample code is to show how to use Protobuf for serialization.
+Essentially, using protobuf, we can convert arbitrarily complex data types between
+native and serialized formats. When something is serialized, it becomes a byte stream
+which is what we then transmit via the "send" command (if it is the producer) and
+receive the bytestream (if it is the consumer) in our assignments.
+
+Files in this directory:
+-----------------------
+
+schema.proto
+        defines the schema for the user-defined type that we want to serialize
+        using the protobuf syntax
+
+flatbufdemo.py
+        Driver program to showcase the flatbuffer-based serialization
+        
+serialize.py
+        uses the generated flatbuffer logic to serialize and deserialize data
+
+-----------------------------
+Package installation
+-----------------------------
+We will need the Protobuf package available from
+
+           https://developers.google.com/protocol-buffers
+
+by doing
+
+           git clone https://github.com/protocolbuffers/protobuf.git
+
+You will have to build the package from the source as described here:
+
+           https://google.github.io/flatbuffers/flatbuffers_guide_building.html
+
+Since we will be building it for our Ubuntu VM, we will follow the instructions to
+build the C++ version of protobuf (as shown in their documentation). The steps are
+reproduced below but please check the documentation in case the steps are
+modified.
+
+After doing the git clone, do the following:
+      cd protobuf
+      git submodule update --init --recursive
+      ./autogen.sh
+      ./configure
+      make
+      make check
+      sudo make install
+      sudo ldconfig
+
+For Python support, above and beyond the steps above, do the following:
+
+    cd python
+    python setup.py build
+    python setup.py test
+
+This will create the protobuf compiler for us called "protoc" which gets installed
+in the /usr/local/bin directory
+
+----------------------------------------------------
+Invoking the Compiler on our Schema
+----------------------------------------------------
+
+Before we can attempt any serialization, we will need to convert the schema to the
+code that our programming language can understand. To that end we use the
+"protoc" compiler from protobuf.  Since we are using Python, we tell
+protoc to generate Python code.
+
+For now, the sample code already has this schema transformed to Python code for us.
+So you don't need to do this for this example.
+
+The command we used is:
+
+    mkdir MyKafkaTopic
+    protoc --python_out=./MyKafkaTopic schema.proto
+
+
+Running the Code
+-------------------------
+
+The rest of the code is run in the following manner:
+(1) Open a shell in your Ubuntu VM
+(2) Invoke "python3 protobufdemo.py"
+
+To find out the command line parameters accepted by this program, type
+python3 protobufdemo.py -h
+
+
